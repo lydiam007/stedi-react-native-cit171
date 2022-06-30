@@ -1,27 +1,20 @@
 import {useState} from "react";
-import { SafeAreaView, StyleSheet, TextInput } from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, Text, TouchableOpacity } from "react-native";
 
-const Login = () => {
+const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oneTimePassword, setOneTimePassword] = useState(null);
 
+
 const sendText = async (phoneNumber) => {
     //using fetch do a POST to https://dev.stedi.me/twofactorlogin/5038967607
-    console.log("Phone Number: ",phoneNumber);
-    const loginResponse = await
-    fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
+    await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber, {
         method: 'POST',
-        headers: {
-            'content-type':'application/text'
-        }
+        headers: {'content-type':'application/text'}
     });
-    const loginResponseText = await loginResponse.text(); //converts the promise to a string by using await
-    console.log("Login Response",loginResponseText);//print the response
-};
-
+}
 const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
-    console.log("PhoneNumber: ", phoneNumber);
-    const loginResponse=await fetch('https://dev.stedi.me/twofactorlogin',{
+    const tokenResponse = await fetch('https://dev.stedi.me/twofactorlogin',{
         method: 'POST',
         body:JSON.stringify({oneTimePassword, phoneNumber}),
         headers: {
@@ -31,23 +24,19 @@ const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
 
     const responseCode = tokenResponse.status;
     console.log("Response Status Code", responseCode);
-    //if
-        //setUserLoggedIn(true);
+    if(responseCode==200) {
+        setUserLoggedIn(true);}
 }
-    const tokenResponseString = await tokenResponse.text;
 
-    const token = await loginResponse.text();
-    console.log(token);
-
-};
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.marginTop}>
       <TextInput
         style={styles.input}
         onChangeText={setPhoneNumber}
         value={phoneNumber}
         placeholder="1234567890"
+        placeholderTextColor='black'
       />
       <TextInput
         style={styles.input}
@@ -59,16 +48,22 @@ const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={()=>{
-            getToken({phoneNumber, oneTimePassword, setUserLoggedIn:props.setUserLoggedIn});
-            console.log("Login Button was clicked")}}
+        onPress={()=>{sendText(phoneNumber);
+        }}
+      >
+        <Text>One Time Password</Text>
+      </TouchableOpacity>
+  
+  <TouchableOpacity
+        style={styles.button}
+        onPress={()=>{props.setUserLoggedIn(true);
+        }}
       >
         <Text>Login</Text>
       </TouchableOpacity>
     </SafeAreaView>
-  );
-
-const styles = StyleSheet.create({
+  );};
+  const styles = StyleSheet.create({
   input: {
     height: 40,
     margin: 12,
@@ -76,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   mainView:{
-    marginTo:100
+    marginTop:100
   },
   button: {
     alignItems: "center",

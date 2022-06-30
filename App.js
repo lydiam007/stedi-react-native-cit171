@@ -67,7 +67,6 @@ else{
 }
 }
 
-
 const styles = StyleSheet.create({
   margin:{
     marginTop:10
