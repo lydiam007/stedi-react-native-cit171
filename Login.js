@@ -5,7 +5,6 @@ const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oneTimePassword, setOneTimePassword] = useState(null);
 
-
 const sendText = async (phoneNumber) => {
     //using fetch do a POST to https://dev.stedi.me/twofactorlogin/5038967607
     await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber, {
@@ -13,10 +12,10 @@ const sendText = async (phoneNumber) => {
         headers: {'content-type':'application/text'}
     });
 }
-const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
+const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn, getEmail}) => {
     const tokenResponse = await fetch('https://dev.stedi.me/twofactorlogin',{
         method: 'POST',
-        body:JSON.stringify({oneTimePassword, phoneNumber}),
+        body:JSON.stringify({oneTimePassword, phoneNumber, getEmail}),
         headers: {
             'content-type':'application/json'
         }
@@ -28,7 +27,6 @@ const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
         setUserLoggedIn(true);}
 }
 
-
   return (
     <SafeAreaView style={styles.marginTop}>
       <TextInput
@@ -36,23 +34,26 @@ const getToken = async({phoneNumber, oneTimePassword, setUserLoggedIn}) => {
         onChangeText={setPhoneNumber}
         value={phoneNumber}
         placeholder="1234567890"
-        placeholderTextColor='black'
+        placeholderTextColor='grey'
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setOneTimePassword}
-        value={oneTimePassword}
-        placeholder="1234"
-        keyboardType="numeric"
-        secureTextEntry={true}
-      />
+    
       <TouchableOpacity
         style={styles.button}
         onPress={()=>{sendText(phoneNumber);
         }}
       >
-        <Text>One Time Password</Text>
+        <Text>Send Text</Text>
       </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        onChangeText={setOneTimePassword}
+        value={oneTimePassword}
+        placeholder="1234"
+        placeholderTextColor='grey'
+        keyboardType="numeric"
+        secureTextEntry={true}
+      />
   
   <TouchableOpacity
         style={styles.button}

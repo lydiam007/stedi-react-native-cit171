@@ -8,8 +8,8 @@ function Setting() {
     return(
       <View>
       <Button
-      title="Log In"
-      onPress={() => Alert.alert('Simple Button pressed')}
+      title="Login"
+      onPress={() => Alert.alert('Simple Button Pressed')}
     />
       </View>
     )
