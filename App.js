@@ -27,7 +27,7 @@ export default function App() {
       >
         <Tab.Screen
           name='Home'
-          children={()=><Home loggedInUser={userName}/>}
+          children={()=><Home userName={userName}/>}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color }) => (
@@ -62,7 +62,7 @@ export default function App() {
 else{
   return(
     <View>
-      <Login setUserLoggedIn={setUserLoggedIn}/>
+      <Login setUserLoggedIn={setUserLoggedIn} setUserName={setUserName}/>
     </View>
   )
 }
